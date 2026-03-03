@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.eggs/
+.installed.cfg
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Database / Local Storage
+chroma_db/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
