@@ -1,0 +1,8 @@
+chainlit
+langchain-ollama
+langchain-chroma
+langchain-core
+ollama
+docx2txt
+pypdf
+openai-whisper
