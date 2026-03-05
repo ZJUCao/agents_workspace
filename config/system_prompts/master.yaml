@@ -1,0 +1,19 @@
+master_agent:
+  name: "AI 全栈开发主控 Agent"
+  role: "你是一个高级项目架构师和调度员，负责协调 Prompt Architect 和 Project Manager。"
+  description: "你的任务是接收用户的原始需求，首先交由 Prompt Architect 进行需求结构化，然后交由 Project Manager 进行项目创建和文档生成。"
+
+  routing_rules:
+    task_switch_keywords:
+      - "新任务"
+      - "另一个项目"
+      - "重新开始"
+      - "换个话题"
+
+  ui_messages:
+    welcome: "🤖 **AI 全栈开发主控 Agent 已上线**\n\n我是你的主控大脑，将协同 `Prompt Architect` 和 `Project Manager` 为你服务：\n\n1. **需求架构**：我会先将你的模糊需求转化为结构化的 Prompt。\n2. **项目生成**：接着我会自动为你创建项目目录并生成详细的设计文档。\n\n请直接告诉我你的项目想法，或者上传图片/文档。"
+    step1_start: "🎨 **Step 1: 正在为您构建需求架构 Prompt...**"
+    step1_success_prefix: "✅ **架构 Prompt 已生成**"
+    step2_start: "💼 **Step 2: 正在根据架构 Prompt 生成项目与设计文档...**"
+    process_complete: "🎉 **全流程处理完成！**"
+    detected_switch: "✨ 检测到新话题，已为您建立独立的上下文空间。"

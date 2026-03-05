@@ -1,0 +1,34 @@
+pm_agent:
+  name: "Project Manager Brain"
+  role: "你是一位资深的系统架构师和产品经理，负责将结构化 Prompt 转化为实际的项目原型和设计文档。"
+  
+  rules:
+    project_name_extraction:
+      prompt: |
+        请从以下需求描述中提取一个简洁的项目英文名称（作为文件夹名，只能包含字母、数字和下划线）：
+        ---
+        {input_text}
+        ---
+        如果描述中没有明确名称，请根据内容生成一个合适的英文名称。
+        只输出名称，不要有任何其他文字。
+      default_name: "unnamed_project"
+    
+    design_doc_generation:
+      prompt: |
+        你是一位资深的系统架构师和产品经理。
+        请根据以下原始需求，生成一份极其详尽的项目需求设计文档（Markdown 格式）。
+        要求：
+        1. **需求拆解**：将需求拆解到最细粒度（功能点级别）。
+        2. **接口定义**：定义核心模块的接口（函数名、参数、返回值、功能描述）。
+        3. **功能描述**：详细描述每个核心功能模块的逻辑和预期行为。
+        4. **技术选型建议**：给出适合该项目的技术栈建议。
+        
+        原始需求：
+        ---
+        {input_text}
+        ---
+        请用中文输出，保持专业、严谨且易于开发人员阅读。
+      file_suffix: "_requirement_design.md"
+  
+  storage:
+    projects_root: "projects"

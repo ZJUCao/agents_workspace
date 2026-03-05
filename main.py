@@ -12,11 +12,13 @@ from prompt_architect.brain import ArchitectBrain
 from project_manager.brain import ProjectManagerBrain
 from utils.vision import analyze_image
 from utils.document import read_document
+from utils.config_loader import config_loader
 
 class MasterBrain:
     def __init__(self):
         self.architect = ArchitectBrain()
         self.pm = ProjectManagerBrain()
+        self.prompts = config_loader.get_prompt("master")["master_agent"]
 
     async def process(self, input_text, image_info="", doc_info=""):
         # 1. 整合最终查询文本
@@ -24,19 +26,19 @@ class MasterBrain:
 
         # 2. 话题切换逻辑 (由 Architect 维护)
         if self.architect.check_task_switch(full_query):
-            await cl.Message(content="✨ 检测到新话题，已为您建立独立的上下文空间。").send()
+            await cl.Message(content=self.prompts["ui_messages"]["detected_switch"]).send()
 
         # 3. 第一步：生成架构 Prompt
-        msg = cl.Message(content="🎨 **Step 1: 正在为您构建需求架构 Prompt...**")
+        msg = cl.Message(content=self.prompts["ui_messages"]["step1_start"])
         await msg.send()
         
         architect_prompt = self.architect.process(full_query)
         
-        msg.content = f"✅ **架构 Prompt 已生成**\n\n---\n{architect_prompt}\n---"
+        msg.content = f"{self.prompts['ui_messages']['step1_success_prefix']}\n\n---\n{architect_prompt}\n---"
         await msg.update()
 
         # 4. 第二步：自动移交给 Project Manager 生成项目
-        msg_pm = cl.Message(content="💼 **Step 2: 正在根据架构 Prompt 生成项目与设计文档...**")
+        msg_pm = cl.Message(content=self.prompts["ui_messages"]["step2_start"])
         await msg_pm.send()
         
         pm_response = self.pm.process(architect_prompt)
@@ -44,13 +46,14 @@ class MasterBrain:
         msg_pm.content = pm_response
         await msg_pm.update()
         
-        return "🎉 **全流程处理完成！**"
+        return self.prompts["ui_messages"]["process_complete"]
 
 @cl.on_chat_start
 async def start():
     brain = MasterBrain()
     cl.user_session.set("brain", brain)
-    await cl.Message(content="🤖 **AI 全栈开发主控 Agent 已上线**\n\n我是你的主控大脑，将协同 `Prompt Architect` 和 `Project Manager` 为你服务：\n\n1. **需求架构**：我会先将你的模糊需求转化为结构化的 Prompt。\n2. **项目生成**：接着我会自动为你创建项目目录并生成详细的设计文档。\n\n请直接告诉我你的项目想法，或者上传图片/文档。").send()
+    welcome_msg = config_loader.get_prompt("master", "master_agent.ui_messages.welcome")
+    await cl.Message(content=welcome_msg).send()
 
 @cl.on_message
 async def main(message: cl.Message):

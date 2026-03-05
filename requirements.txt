@@ -7,3 +7,4 @@ docx2txt
 pypdf
 openai-whisper
 python-dotenv
+PyYAML

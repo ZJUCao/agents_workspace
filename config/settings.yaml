@@ -1,0 +1,39 @@
+# 全局参数设定 (Global Settings)
+
+llm:
+  model_name: "qwen2.5:latest"
+  temperature: 0.7
+  max_tokens: 4096
+  base_url: "http://localhost:11434"
+
+embeddings:
+  model_name: "nomic-embed-text"
+  base_url: "http://localhost:11434"
+
+storage:
+  chroma_db_dir: "chroma_db"
+  projects_root: "projects"
+
+agents:
+  architect:
+    namespace: "prompt_architect"
+    k_search: 3
+    system_prompt: |
+      你是一位资深的 Prompt Engineer。
+      [历史背景]: {context}
+      [当前需求]: {input_text}
+
+      请根据需求生成最适合的 AI Prompt（如 ChatGPT, Claude 或 Midjourney 风格），
+      并给出简要的参数微调建议。
+  project_manager:
+    namespace: "project_manager"
+
+vision:
+  enabled: true
+  model: "llava:latest"
+
+document_processing:
+  supported_formats:
+    - pdf
+    - docx
+    - txt
