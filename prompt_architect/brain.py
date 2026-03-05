@@ -5,10 +5,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.memory import UniversalMemory
 from langchain_ollama import OllamaLLM
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class ArchitectBrain:
     def __init__(self):
-        self.llm = OllamaLLM(model="qwen2.5:latest")
+        model_name = os.getenv("OLLAMA_MODEL", "qwen2.5:latest")
+        self.llm = OllamaLLM(model=model_name)
         self.memory = UniversalMemory(namespace="prompt_architect")
         self.current_task_id = "default_task"
 

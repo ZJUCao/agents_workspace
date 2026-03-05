@@ -3,12 +3,18 @@ import os
 import re
 from langchain_ollama import OllamaLLM
 from utils.memory import UniversalMemory
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class ProjectManagerBrain:
     def __init__(self):
-        self.llm = OllamaLLM(model="qwen2.5:latest")
+        model_name = os.getenv("OLLAMA_MODEL", "qwen2.5:latest")
+        self.llm = OllamaLLM(model=model_name)
         self.memory = UniversalMemory(namespace="project_manager")
-        self.base_projects_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "projects")
+        
+        projects_root = os.getenv("PROJECTS_ROOT", "projects")
+        self.base_projects_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), projects_root)
         
         if not os.path.exists(self.base_projects_dir):
             os.makedirs(self.base_projects_dir)
